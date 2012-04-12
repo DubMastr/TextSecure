@@ -116,6 +116,7 @@ public class ComposeMessageActivity extends Activity {
   private static final int MENU_OPTION_DETAILS        = 9;
   private static final int MENU_OPTION_VERIFY_IDENTITY = 10;
   private static final int MENU_OPTION_REDECRYPT       = 11;
+  private static final int MENU_SECURE_SESSION_OPTIONS  = 12;
 	
   private static final int MENU_OPTION_COPY           = 100;
   private static final int MENU_OPTION_DELETE         = 101;
@@ -233,16 +234,12 @@ public class ComposeMessageActivity extends Activity {
     menu.clear();
 
     if (recipients != null && recipients.isSingleRecipient())
-      menu.add(0, MENU_OPTION_CALL, Menu.NONE, R.string.call).setIcon(android.R.drawable.ic_menu_call);
-			
-    menu.add(0, MENU_OPTION_DELETE_THREAD, Menu.NONE, R.string.delete_thread).setIcon(android.R.drawable.ic_menu_delete);
-    menu.add(0, MENU_OPTION_ADD_ATTACHMENT, Menu.NONE, R.string.add_attachment).setIcon(R.drawable.ic_menu_attachment);
-		
+    	menu.add(0, MENU_OPTION_CALL, Menu.NONE, R.string.call).setIcon(android.R.drawable.ic_menu_call);	
+    	menu.add(0, MENU_OPTION_DELETE_THREAD, Menu.NONE, R.string.delete_thread).setIcon(android.R.drawable.ic_menu_delete);
+    	menu.add(0, MENU_OPTION_ADD_ATTACHMENT, Menu.NONE, R.string.add_attachment).setIcon(R.drawable.ic_menu_attachment);
+    
     if (recipients != null && recipients.isSingleRecipient() && SessionRecord.hasSession(this, recipients.getPrimaryRecipient())) {
-      SubMenu secureSettingsMenu = menu.addSubMenu(R.string.secure_session_options).setIcon(android.R.drawable.ic_menu_more);
-      secureSettingsMenu.add(0, MENU_OPTION_VERIFY_KEYS, Menu.NONE, R.string.verify_secure_session).setIcon(R.drawable.ic_lock_message_sms);
-      secureSettingsMenu.add(0, MENU_OPTION_VERIFY_IDENTITY, Menu.NONE, R.string.verify_recipient_identity).setIcon(android.R.drawable.ic_menu_zoom);
-      secureSettingsMenu.add(0, MENU_OPTION_DELETE_KEYS, Menu.NONE, R.string.abort_secure_session).setIcon(android.R.drawable.ic_menu_revert);
+      menu.add(0, MENU_SECURE_SESSION_OPTIONS, Menu.NONE, R.string.secure_session_options).setIcon(android.R.drawable.ic_menu_more);
     } else if (recipients != null && recipients.isSingleRecipient()) {
       menu.add(0, MENU_OPTION_START_SESSION, Menu.NONE, R.string.start_secure_session).setIcon(R.drawable.ic_lock_message_sms);
     }
@@ -257,11 +254,33 @@ public class ComposeMessageActivity extends Activity {
     switch (item.getItemId()) {
     case MENU_OPTION_CALL:            dial(recipients.getPrimaryRecipient());  return true;
     case MENU_OPTION_DELETE_THREAD:   deleteThread();                          return true;
-    case MENU_OPTION_VERIFY_KEYS:     verifyKeys();                            return true;
     case MENU_OPTION_START_SESSION:   initiateSecureSession();                 return true;
-    case MENU_OPTION_DELETE_KEYS:     abortSecureSession();                    return true;
     case MENU_OPTION_ADD_ATTACHMENT:  addAttachment();                         return true;
-    case MENU_OPTION_VERIFY_IDENTITY: verifyIdentity();                        return true;
+    case MENU_SECURE_SESSION_OPTIONS:
+    	BhoContextualMenu m = new BhoContextualMenu(this);
+        final Map<Integer, String> opts = new HashMap<Integer, String>();
+        opts.put(MENU_OPTION_VERIFY_KEYS, getString(R.string.verify_secure_session));
+        opts.put(MENU_OPTION_VERIFY_IDENTITY, getString(R.string.verify_recipient_identity));
+        opts.put(MENU_OPTION_DELETE_KEYS, getString(R.string.abort_secure_session));
+        m.setAdapter(m.setOpts(opts), new DialogInterface.OnClickListener() {
+    		
+    		@Override
+    		public void onClick(DialogInterface dialog, int which) {
+    			switch(which) {
+    				case MENU_OPTION_VERIFY_KEYS:
+    				  verifyKeys();
+    			      break;
+    			    case MENU_OPTION_VERIFY_IDENTITY:
+    			      verifyIdentity();
+    			      break;
+    			    case MENU_OPTION_DELETE_KEYS:
+    			      abortSecureSession();
+    			      break;
+    			}
+    		}
+        });
+        m.show();
+    	return true;
     }
 		
     return false;

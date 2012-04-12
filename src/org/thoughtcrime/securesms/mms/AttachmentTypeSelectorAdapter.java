@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.lang.BhoTextView;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -42,7 +43,7 @@ public class AttachmentTypeSelectorAdapter extends ArrayAdapter<AttachmentTypeSe
 	private final Context context;
 	
 	public AttachmentTypeSelectorAdapter(Context context) {
-		super(context, R.layout.icon_list_item, getItemList());
+		super(context, R.layout.icon_list_item, getItemList(context));
 		this.context = context;
 	}
 	
@@ -52,7 +53,7 @@ public class AttachmentTypeSelectorAdapter extends ArrayAdapter<AttachmentTypeSe
 	
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView text;
+        BhoTextView text;
         ImageView image;
 
         View view;
@@ -63,7 +64,7 @@ public class AttachmentTypeSelectorAdapter extends ArrayAdapter<AttachmentTypeSe
             view = convertView;
         }
 
-        text = (TextView) view.findViewById(R.id.text1);
+        text = (BhoTextView) view.findViewById(R.id.text1);
         text.setText(getItem(position).getTitle());
 
         image = (ImageView) view.findViewById(R.id.icon);
@@ -72,13 +73,13 @@ public class AttachmentTypeSelectorAdapter extends ArrayAdapter<AttachmentTypeSe
         return view;
     }
 	
-	private static List<IconListItem> getItemList() {
+	private static List<IconListItem> getItemList(Context c) {
         List<IconListItem> data = new ArrayList<IconListItem>(7);
-        addItem(data, "Pictures", R.drawable.ic_launcher_gallery, ADD_IMAGE);
+        addItem(data, c.getString(R.string.attachment_picture), R.drawable.ic_launcher_gallery, ADD_IMAGE);
 //        addItem(data, "Capture picture", R.drawable.ic_launcher_camera, TAKE_PICTURE);
-        addItem(data, "Videos", R.drawable.ic_launcher_video_player, ADD_VIDEO);
+        addItem(data, c.getString(R.string.attachment_video), R.drawable.ic_launcher_video_player, ADD_VIDEO);
 //        addItem(data, "Capture video", R.drawable.ic_launcher_camera_record, RECORD_VIDEO);
-        addItem(data, "Audio", R.drawable.ic_launcher_musicplayer_2, ADD_SOUND);
+        addItem(data, c.getString(R.string.attachment_audio), R.drawable.ic_launcher_musicplayer_2, ADD_SOUND);
 //        addItem(data, "Record audio", R.drawable.ic_launcher_record_audio, RECORD_SOUND);
 
         return data;

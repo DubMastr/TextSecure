@@ -207,6 +207,13 @@
   <string name="you_read_this_">འདི་ཀློགས:</string>
   <string name="your_identity_">ཁྱེད་ཀྱི་ངོ་རྟགས།</string>
   <string name="are_you_sure_that_you_would_like_to_mark_this_as_a_valid_identity_key_for_all_future_correspondence_with_this_recipient">ཁྱེད་ཀྱི་དངོས་གནས་འཕྲིན་ཐུང་གཏང་ཡུལ་འདི་དང་ལྷན་དུ་མ་འོངས་འབྲེལ་བ་བྱ་རྒྱུའི་ཆེད་ངོས་འཛིན་ལྡེ་མིག་དེ་ཁུངས་ཐུབ་ཡིན་པའི་རྟགས་རྒྱག་རྒྱུ་ཡིན་ནམ།</string>
+  
+  <!--  NEW STRINGS 20120412 -->
+  <string name="attachment_picture">Picture</string>
+  <string name="attachment_video">Video</string>
+  <string name="attachment_audio">Audio</string>
+      
+  
   <!--PREFERENCES STRINGS-->
   <string name="use_settings_title">སྒྲིག་བཟོ་བརྗེས།</string>
   <string name="pref_all_sms_summary">ནང་ཡོང་འཕྲིན་ཐུང་ཚང་མར་བལྟ་བ་དང་ཉར་བ་ལ། ཡི་གེའི་ཉེན་སྲུང་བེད་སྤྱོད་ཐོངས།</string>
