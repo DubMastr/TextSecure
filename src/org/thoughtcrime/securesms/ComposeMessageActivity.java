@@ -79,6 +79,7 @@ import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import org.thoughtcrime.securesms.lang.BhoButton;
 import org.thoughtcrime.securesms.lang.BhoContextualMenu;
+import org.thoughtcrime.securesms.lang.BhoToast;
 import org.thoughtcrime.securesms.lang.BhoTyper;
 
 import android.widget.CursorAdapter;
@@ -533,7 +534,7 @@ public class ComposeMessageActivity extends Activity {
       attachmentManager.setImage(imageUri);
     } catch (IOException e) {
       attachmentManager.clear();
-      Toast.makeText(this, R.string.sorry_there_was_an_error_setting_your_attachment_, Toast.LENGTH_LONG).show();
+      new BhoToast(this, R.string.sorry_there_was_an_error_setting_your_attachment_, Toast.LENGTH_LONG);
       Log.w("ComposeMessageActivity", e);
     }
   }
@@ -543,11 +544,11 @@ public class ComposeMessageActivity extends Activity {
       attachmentManager.setVideo(videoUri);			
     } catch (IOException e) {
       attachmentManager.clear();
-      Toast.makeText(this, R.string.sorry_there_was_an_error_setting_your_attachment_, Toast.LENGTH_LONG).show();
+      new BhoToast(this, R.string.sorry_there_was_an_error_setting_your_attachment_, Toast.LENGTH_LONG);
       Log.w("ComposeMessageActivity", e);
     } catch (MediaTooLargeException e) {
       attachmentManager.clear();
-      Toast.makeText(this, R.string.sorry_the_selected_video_exceeds_message_size_restrictions_, Toast.LENGTH_LONG).show();
+      new BhoToast(this, R.string.sorry_the_selected_video_exceeds_message_size_restrictions_, Toast.LENGTH_LONG);
       Log.w("ComposeMessageActivity", e);
     }
   }
@@ -557,11 +558,11 @@ public class ComposeMessageActivity extends Activity {
       attachmentManager.setAudio(audioUri);			
     } catch (IOException e) {
       attachmentManager.clear();
-      Toast.makeText(this, R.string.sorry_there_was_an_error_setting_your_attachment_, Toast.LENGTH_LONG).show();
+      new BhoToast(this, R.string.sorry_there_was_an_error_setting_your_attachment_, Toast.LENGTH_LONG);
       Log.w("ComposeMessageActivity", e);			
     } catch (MediaTooLargeException e) {
       attachmentManager.clear();
-      Toast.makeText(this, R.string.sorry_the_selected_audio_exceeds_message_size_restrictions_, Toast.LENGTH_LONG).show();
+      new BhoToast(this, R.string.sorry_the_selected_audio_exceeds_message_size_restrictions_, Toast.LENGTH_LONG);
       Log.w("ComposeMessageActivity", e);			
     }
   }
@@ -750,10 +751,10 @@ public class ComposeMessageActivity extends Activity {
       sendComplete(recipients, allocatedThreadId);
       MessageNotifier.updateNotification(ComposeMessageActivity.this, false);
     } catch (RecipientFormattingException ex) {
-      Toast.makeText(ComposeMessageActivity.this, R.string.recipient_is_not_a_valid_sms_or_email_address_, Toast.LENGTH_LONG).show();
+    	new BhoToast(ComposeMessageActivity.this, R.string.recipient_is_not_a_valid_sms_or_email_address_, Toast.LENGTH_LONG);
       Log.w("compose", ex);
     } catch (InvalidMessageException ex) {
-      Toast.makeText(ComposeMessageActivity.this, R.string.message_is_empty_, Toast.LENGTH_SHORT).show();
+    	new BhoToast(ComposeMessageActivity.this, R.string.message_is_empty_, Toast.LENGTH_SHORT);
       Log.w("compose", ex);
     } catch (MmsException e) {
       Log.w("ComposeMessageActivity", e);

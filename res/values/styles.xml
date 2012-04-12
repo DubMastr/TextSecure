@@ -37,4 +37,15 @@
 	    <item name="android:paddingRight">10dip</item>
 	    <item name="android:paddingTop">4dip</item>
 	</style>
+	
+	<style name="bho_toast">
+	    <item name="android:background">#dd000000</item>
+	</style>
+	
+	<style name="bho_toast_P">
+	    <item name="android:padding">10dip</item>
+	    <item name="android:textSize">16dip</item>
+	    <item name="android:textColor">#ffcccccc</item>
+	</style>
+	
 </resources>

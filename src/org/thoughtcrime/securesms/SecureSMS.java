@@ -17,6 +17,8 @@
 package org.thoughtcrime.securesms;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +38,7 @@ import org.thoughtcrime.securesms.database.NoExternalStorageException;
 import org.thoughtcrime.securesms.database.SmsMigrator;
 import org.thoughtcrime.securesms.database.ThreadDatabase;
 import org.thoughtcrime.securesms.lang.BhoContextualMenu;
+import org.thoughtcrime.securesms.lang.BhoToast;
 import org.thoughtcrime.securesms.lang.BhoTyper;
 
 import org.thoughtcrime.securesms.recipients.Recipient;
@@ -62,6 +65,7 @@ import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -71,11 +75,16 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.InflateException;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.LayoutInflater.Factory;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
@@ -83,10 +92,14 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import org.thoughtcrime.securesms.lang.BhoEditText;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.TextView;
 
 /**
  * 
@@ -111,6 +124,9 @@ public class SecureSMS extends ListActivity {
   private static final int MENU_EXIT_BATCH              = 15;
   private static final int MENU_SELECT_ALL_THREADS      = 16;
   private static final int MENU_CLEAR_SELECTION         = 17;
+  
+  private static final int MENU_IMPORT_EXPORT			= 18;
+  private static final int MENU_MORE					= 19;
 	
   private static final int VIEW_THREAD_ID     = 100;
   private static final int VIEW_CONTACT_ID    = 101;
@@ -124,6 +140,8 @@ public class SecureSMS extends ListActivity {
   private NewKeyReceiver receiver;
   private boolean havePromptedForPassphrase = false;
   private boolean batchMode                 = false;
+  
+  public static Typeface t;
   	
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -137,6 +155,9 @@ public class SecureSMS extends ListActivity {
     initializeSearchListener();
     registerForContextMenu(getListView());
     registerForContactsUpdates();
+    
+	t = Typeface.createFromAsset(getAssets(), BhoTyper.FONT);
+    
   }
   
   @Override
@@ -180,17 +201,47 @@ public class SecureSMS extends ListActivity {
     MemoryCleaner.clean(masterSecret);
     super.onDestroy();
   }
-  	
+  	  
   @Override
-  public boolean onPrepareOptionsMenu(Menu menu) {
-    super.onPrepareOptionsMenu(menu);
+  public boolean onCreateOptionsMenu(Menu menu) {
 		
     menu.clear();
-		
+    
     if (!batchMode) prepareNormalMenu(menu);
     else            prepareBatchModeMenu(menu);
-		
-    return true;
+	
+    // TODO: this does not actually work.
+    getLayoutInflater().setFactory(new Factory() {
+
+		@Override
+		public View onCreateView(String name, Context context, AttributeSet attrs) {
+			if(name.equalsIgnoreCase("com.android.internal.view.menu.IconMenuItemView")) {
+				try {
+					final LayoutInflater li = getLayoutInflater();
+				
+					final View view = li.createView(name, null, attrs);
+					
+					new Handler().post(new Runnable() {
+						@Override
+						public void run() {
+							((TextView) view).setTypeface(t);
+						}	
+					});
+
+					return view;
+				} catch(InflateException e) {
+					Log.d(BhoTyper.BHOTAG, "hopeless: " + e.toString());
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			return null;
+		}
+    	
+    });
+    
+    return super.onCreateOptionsMenu(menu);
   }
 	
   private void prepareNormalMenu(Menu menu) {
@@ -201,16 +252,9 @@ public class SecureSMS extends ListActivity {
 
     menu.add(0, MENU_SEARCH, Menu.NONE, R.string.search).setIcon(android.R.drawable.ic_menu_search);
     menu.add(0, MENU_PREFERENCES_KEY, Menu.NONE, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);	
-		
-    SubMenu importExportMenu = menu.addSubMenu(R.string.import_export).setIcon(android.R.drawable.ic_menu_save);
-    importExportMenu.add(0, MENU_EXPORT, Menu.NONE, R.string.export_to_sd_card).setIcon(android.R.drawable.ic_menu_save);
-    importExportMenu.add(0, MENU_IMPORT, Menu.NONE, R.string.import_from_sd_card).setIcon(android.R.drawable.ic_menu_revert);
-		
-    SubMenu moreMenu = menu.addSubMenu(R.string.more).setIcon(android.R.drawable.ic_menu_more);
-
-    if (masterSecret != null)
-      moreMenu.add(0, MENU_CLEAR_PASSPHRASE, Menu.NONE, R.string.clear_passphrase).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-
+	
+    menu.add(0, MENU_IMPORT_EXPORT, Menu.NONE, R.string.import_export).setIcon(android.R.drawable.ic_menu_save);
+    menu.add(0, MENU_MORE, Menu.NONE, R.string.more).setIcon(android.R.drawable.ic_menu_more);
   }
 	
   private void prepareBatchModeMenu(Menu menu) {
@@ -242,14 +286,53 @@ public class SecureSMS extends ListActivity {
       preferencesIntent.putExtra("master_secret", masterSecret);
       startActivity(preferencesIntent);
       return true;
-    case MENU_EXPORT:
-      ExportHandler exportHandler = new ExportHandler();
-      exportHandler.export();
-      return true;
-    case MENU_IMPORT:
-      ExportHandler importHandler = new ExportHandler();
-      importHandler.importFromSd();
-      return true;
+    case MENU_IMPORT_EXPORT:
+    	BhoContextualMenu m = new BhoContextualMenu(this);
+        final Map<Integer, String> opts = new HashMap<Integer, String>();
+        opts.put(MENU_EXPORT, getString(R.string.export_to_sd_card));
+        opts.put(MENU_IMPORT, getString(R.string.import_from_sd_card));
+        m.setAdapter(m.setOpts(opts), new DialogInterface.OnClickListener() {
+    		
+    		@Override
+    		public void onClick(DialogInterface dialog, int which) {
+    			switch(which) {
+    				case MENU_EXPORT:
+    			      ExportHandler exportHandler = new ExportHandler();
+    			      exportHandler.export();
+    			      break;
+    			    case MENU_IMPORT:
+    			      ExportHandler importHandler = new ExportHandler();
+    			      importHandler.importFromSd();
+    			      break;
+    			}
+    		}
+        });
+        m.show();
+    	return true;
+    case MENU_MORE:
+    	if (masterSecret != null) {
+    		BhoContextualMenu m2 = new BhoContextualMenu(this);
+            final Map<Integer, String> opts2 = new HashMap<Integer, String>();
+            opts2.put(MENU_CLEAR_PASSPHRASE, getString(R.string.clear_passphrase));
+            m2.setAdapter(m2.setOpts(opts2), new DialogInterface.OnClickListener() {
+        		
+        		@Override
+        		public void onClick(DialogInterface dialog, int which) {
+        			switch(which) {
+        				case MENU_CLEAR_PASSPHRASE:
+        					Intent keyService = new Intent(SecureSMS.this, KeyCachingService.class);
+        				    keyService.setAction(KeyCachingService.CLEAR_KEY_ACTION);
+        				    startService(keyService);
+        				    addConversationItems();
+        				    promptForPassphrase();
+        				    //			finish();
+        			      break;
+        			}
+        		}
+            });
+            m2.show();
+    	}
+    	return true;
     case MENU_SEARCH:
       findViewById(R.id.search_text).setVisibility(View.VISIBLE);
       findViewById(R.id.search_close).setVisibility(View.VISIBLE);
@@ -259,14 +342,6 @@ public class SecureSMS extends ListActivity {
     case MENU_SELECT_ALL_THREADS:      selectAllThreads();      return true;
     case MENU_CLEAR_SELECTION:         unselectAllThreads();    return true;
     case MENU_EXIT_BATCH:              stopBatchMode();         return true;
-    case MENU_CLEAR_PASSPHRASE:
-      Intent keyService = new Intent(this, KeyCachingService.class);
-      keyService.setAction(KeyCachingService.CLEAR_KEY_ACTION);
-      startService(keyService);
-      addConversationItems();
-      promptForPassphrase();
-      //			finish();
-      return true;
     }
 		
     return false;
@@ -782,20 +857,20 @@ public class SecureSMS extends ListActivity {
     public void handleMessage(Message message) {
       switch (message.what) {
       case ERROR_NO_SD:
-        Toast.makeText(SecureSMS.this, R.string.no_sd_card_found_, Toast.LENGTH_LONG).show();
+    	  new BhoToast(SecureSMS.this, R.string.no_sd_card_found_, Toast.LENGTH_LONG);
         break;
       case ERROR_IO:
-        Toast.makeText(SecureSMS.this, R.string.error_exporting_to_sd_, Toast.LENGTH_LONG).show();
+    	  new BhoToast(SecureSMS.this, R.string.error_exporting_to_sd_, Toast.LENGTH_LONG);
         break;
       case COMPLETE:
         switch (task) {
         case TASK_IMPORT:
-          Toast.makeText(SecureSMS.this, R.string.import_successful_, Toast.LENGTH_LONG).show();
+        	new BhoToast(SecureSMS.this, R.string.import_successful_, Toast.LENGTH_LONG);
           addConversationItems();
           promptForPassphrase();
           break;
         case TASK_EXPORT:
-          Toast.makeText(SecureSMS.this, R.string.export_successful_, Toast.LENGTH_LONG).show();
+        	new BhoToast(SecureSMS.this, R.string.export_successful_, Toast.LENGTH_LONG);
           break;
         }
         break;

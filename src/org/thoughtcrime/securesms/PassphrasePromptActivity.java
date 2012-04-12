@@ -21,9 +21,12 @@ import org.thoughtcrime.securesms.crypto.MasterSecret;
 import org.thoughtcrime.securesms.crypto.MasterSecretUtil;
 import org.thoughtcrime.securesms.lang.BhoButton;
 import org.thoughtcrime.securesms.lang.BhoEditText;
+import org.thoughtcrime.securesms.lang.BhoToast;
+import org.thoughtcrime.securesms.lang.BhoTyper;
 import org.thoughtcrime.securesms.util.MemoryCleaner;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -65,7 +68,8 @@ public class PassphrasePromptActivity extends PassphraseActivity {
         MemoryCleaner.clean(passphrase);
         setMasterSecret(masterSecret);
       } catch (InvalidPassphraseException ipe) {
-        Toast.makeText(getApplicationContext(), R.string.invalid_passphrase_, Toast.LENGTH_SHORT).show();
+    	  Log.d(BhoTyper.BHOTAG, "no wrong pswrd");
+    	  new BhoToast(getApplicationContext(), R.string.invalid_passphrase_, Toast.LENGTH_SHORT);
       }
     }
   }
