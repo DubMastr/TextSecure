@@ -18,6 +18,7 @@ package org.thoughtcrime.securesms.preferences;
 
 import org.thoughtcrime.securesms.ApplicationPreferencesActivity;
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.lang.BhoTextView;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,7 +40,7 @@ public class PassphraseTimeoutPreference extends DialogPreference {
 
   private Spinner scaleSpinner;
   private SeekBar seekBar;
-  private TextView timeoutText;
+  private BhoTextView timeoutText;
 	
   public PassphraseTimeoutPreference(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -53,7 +54,7 @@ public class PassphraseTimeoutPreference extends DialogPreference {
     View dialog       = super.onCreateDialogView();
     this.scaleSpinner = (Spinner)dialog.findViewById(R.id.scale);
     this.seekBar      = (SeekBar)dialog.findViewById(R.id.seekbar);
-    this.timeoutText  = (TextView)dialog.findViewById(R.id.timeout_text);
+    this.timeoutText  = (BhoTextView)dialog.findViewById(R.id.timeout_text);
 
     initializeDefaults();
     initializeListeners();

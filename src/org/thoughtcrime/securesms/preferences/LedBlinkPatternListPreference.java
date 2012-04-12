@@ -18,6 +18,7 @@ package org.thoughtcrime.securesms.preferences;
 
 import org.thoughtcrime.securesms.ApplicationPreferencesActivity;
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.lang.BhoTextView;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -46,8 +47,8 @@ public class LedBlinkPatternListPreference extends ListPreference implements OnS
   private SeekBar seekBarOn;
   private SeekBar seekBarOff;
 
-  private TextView seekBarOnLabel;
-  private TextView seekBarOffLabel;
+  private BhoTextView seekBarOnLabel;
+  private BhoTextView seekBarOffLabel;
     
   private boolean dialogInProgress;
 
@@ -95,8 +96,8 @@ public class LedBlinkPatternListPreference extends ListPreference implements OnS
 
     this.seekBarOn       = (SeekBar)view.findViewById(R.id.SeekBarOn);
     this.seekBarOff      = (SeekBar)view.findViewById(R.id.SeekBarOff);
-    this.seekBarOnLabel  = (TextView)view.findViewById(R.id.SeekBarOnMsLabel);
-    this.seekBarOffLabel = (TextView)view.findViewById(R.id.SeekBarOffMsLabel);
+    this.seekBarOnLabel  = (BhoTextView)view.findViewById(R.id.SeekBarOnMsLabel);
+    this.seekBarOffLabel = (BhoTextView)view.findViewById(R.id.SeekBarOffMsLabel);
 
     this.seekBarOn.setOnSeekBarChangeListener(this);
     this.seekBarOff.setOnSeekBarChangeListener(this);
