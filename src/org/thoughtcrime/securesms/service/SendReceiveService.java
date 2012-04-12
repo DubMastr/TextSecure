@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.thoughtcrime.securesms.crypto.MasterSecret;
 import org.thoughtcrime.securesms.database.CanonicalSessionMigrator;
+import org.thoughtcrime.securesms.lang.BhoToast;
 import org.thoughtcrime.securesms.util.WorkerThread;
 
 import android.app.Service;
@@ -207,7 +208,7 @@ public class SendReceiveService extends Service {
     }
     @Override
       public void handleMessage(Message message) {
-      Toast.makeText(SendReceiveService.this, (String)message.obj, Toast.LENGTH_LONG).show();
+    	new BhoToast(SendReceiveService.this.getApplicationContext(), (String)message.obj, Toast.LENGTH_LONG);
     }
   }
 

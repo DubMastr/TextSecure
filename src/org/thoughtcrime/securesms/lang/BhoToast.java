@@ -13,6 +13,11 @@ public class BhoToast extends Toast {
         super(context);
         makeText(context, context.getString(text), duration).show();
     }
+    
+    public BhoToast(Context context, String text, int duration) {
+    	super(context);
+    	makeText(context, text, duration).show();
+    }
  
     public static Toast makeText(Context context, CharSequence text, int duration) {
  
