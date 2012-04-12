@@ -16,12 +16,16 @@
  */
 package org.thoughtcrime.securesms;
 
+import org.thoughtcrime.securesms.lang.BhoTextView;
 import org.thoughtcrime.securesms.service.KeyCachingService;
 
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TabHost;
 
 /**
@@ -85,7 +89,7 @@ public class ContactSelectionActivity extends TabActivity implements TabHost.OnT
     Intent intent = new Intent(this, GroupSelectionListActivity.class);
     	
     tabHost.addTab(tabHost.newTabSpec("groups")
-		   .setIndicator(getString(R.string.groups), getResources().getDrawable(android.R.drawable.ic_menu_share))
+		   .setIndicator(makeTab(getString(R.string.groups), android.R.drawable.ic_menu_share))
 		   .setContent(intent));
   }
     
@@ -93,7 +97,7 @@ public class ContactSelectionActivity extends TabActivity implements TabHost.OnT
     Intent intent = new Intent(this, ContactSelectionRecentActivity.class);
     	
     tabHost.addTab(tabHost.newTabSpec("recent")
-		   .setIndicator(getString(R.string.recent), getResources().getDrawable(android.R.drawable.ic_menu_call))
+		   .setIndicator(makeTab(getString(R.string.recent), android.R.drawable.ic_menu_call))
 		   .setContent(intent));
   }
 	
@@ -101,12 +105,23 @@ public class ContactSelectionActivity extends TabActivity implements TabHost.OnT
     Intent intent = new Intent(this, ContactSelectionListActivity.class);
 
     tabHost.addTab(tabHost.newTabSpec("contacts")
-		   .setIndicator(getString(R.string.contacts), getResources().getDrawable(android.R.drawable.ic_menu_agenda))
+		   .setIndicator(makeTab(getString(R.string.contacts), android.R.drawable.ic_menu_agenda))
 		   .setContent(intent));
   }
 
   public void onTabChanged(String tabId) {
 	
+  }
+  
+  private View makeTab(String label, int drawableId) {
+	  View tabIndicator = LayoutInflater.from(this).inflate(R.layout.bho_tab_indicator, getTabWidget(), false);
+	  BhoTextView title = (BhoTextView) tabIndicator.findViewById(R.id.title);
+	  title.setText(label);
+	  
+	  ImageView icon = (ImageView) tabIndicator.findViewById(R.id.icon);
+	  icon.setImageResource(drawableId);
+	  
+	  return tabIndicator;
   }
     
 }

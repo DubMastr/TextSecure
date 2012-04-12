@@ -48,4 +48,9 @@
 	    <item name="android:textColor">#ffcccccc</item>
 	</style>
 	
+	<style name="bho_tab_P">
+	    <item name="android:textSize">12dip</item>
+	    <item name="android:textColor">#ff000000</item>
+	</style>
+	
 </resources>

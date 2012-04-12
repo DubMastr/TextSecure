@@ -29,8 +29,7 @@
             android:layout_height="68dip"
             android:paddingLeft="1dip"
             android:paddingRight="1dip"
-            android:paddingTop="4dip"
-        />
+            android:paddingTop="4dip" />
 
         <FrameLayout android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
