@@ -30,7 +30,7 @@ import org.thoughtcrime.securesms.database.MmsDatabase;
 import org.thoughtcrime.securesms.database.MmsMessageRecord;
 import org.thoughtcrime.securesms.lang.BhoButton;
 import org.thoughtcrime.securesms.lang.BhoTextView;
-import org.thoughtcrime.securesms.lang.BhoTyper;
+import org.thoughtcrime.securesms.lang.BhoToast;
 import org.thoughtcrime.securesms.mms.Slide;
 import org.thoughtcrime.securesms.mms.SlideDeck;
 import org.thoughtcrime.securesms.recipients.Recipient;
@@ -58,7 +58,6 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -420,13 +419,13 @@ public class ConversationItem extends LinearLayout {
     public void handleMessage(Message message) {
       switch (message.what) {
       case FAILURE:
-        Toast.makeText(context, R.string.error_while_saving_attachment_to_sd_card_, Toast.LENGTH_LONG);
+        new BhoToast(context, R.string.error_while_saving_attachment_to_sd_card_, Toast.LENGTH_LONG);
         break;
       case SUCCESS:
-        Toast.makeText(context, R.string.success_, Toast.LENGTH_LONG);
+        new BhoToast(context, R.string.success_, Toast.LENGTH_LONG);
         break;
       case WRITE_ACCESS_FAILURE:
-        Toast.makeText(context, R.string.unable_to_write_to_sd_card_, Toast.LENGTH_LONG);
+        new BhoToast(context, R.string.unable_to_write_to_sd_card_, Toast.LENGTH_LONG);
         break;
       }
 			

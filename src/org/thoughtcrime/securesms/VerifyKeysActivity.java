@@ -20,13 +20,13 @@ import org.thoughtcrime.securesms.crypto.KeyUtil;
 import org.thoughtcrime.securesms.crypto.MasterSecret;
 import org.thoughtcrime.securesms.crypto.SerializableKey;
 import org.thoughtcrime.securesms.database.SessionRecord;
+import org.thoughtcrime.securesms.lang.BhoAlertDialog;
 import org.thoughtcrime.securesms.lang.BhoButton;
 import org.thoughtcrime.securesms.lang.BhoTextView;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.Hex;
 import org.thoughtcrime.securesms.util.MemoryCleaner;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -119,7 +119,7 @@ public class VerifyKeysActivity extends KeyScanningActivity {
 	
   private class AbortListener implements OnClickListener {
     public void onClick(View v) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(VerifyKeysActivity.this);
+      BhoAlertDialog builder = new BhoAlertDialog(VerifyKeysActivity.this);
       builder.setTitle(R.string.abort_secure_session_confirmation);
       builder.setIcon(android.R.drawable.ic_dialog_alert);
       builder.setCancelable(true);

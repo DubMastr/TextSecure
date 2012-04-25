@@ -21,12 +21,12 @@ import org.thoughtcrime.securesms.crypto.IdentityKeyUtil;
 import org.thoughtcrime.securesms.crypto.KeyUtil;
 import org.thoughtcrime.securesms.crypto.MasterSecret;
 import org.thoughtcrime.securesms.database.SessionRecord;
+import org.thoughtcrime.securesms.lang.BhoAlertDialog;
 import org.thoughtcrime.securesms.lang.BhoButton;
 import org.thoughtcrime.securesms.lang.BhoTextView;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.MemoryCleaner;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -142,7 +142,7 @@ public class VerifyIdentityActivity extends KeyScanningActivity {
 	
   private class AbortButtonListener implements View.OnClickListener {
     public void onClick(View v) {
-      AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(VerifyIdentityActivity.this);
+      BhoAlertDialog dialogBuilder = new BhoAlertDialog(VerifyIdentityActivity.this);
       dialogBuilder.setTitle(R.string.abort_session_);
       dialogBuilder.setIcon(android.R.drawable.ic_dialog_info);
       dialogBuilder.setMessage(R.string.are_you_sure_that_you_would_like_to_abort_this_secure_session_);
@@ -160,7 +160,7 @@ public class VerifyIdentityActivity extends KeyScanningActivity {
 	
   private class VerifiedButtonListener implements View.OnClickListener {
     public void onClick(View v) {
-      AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(VerifyIdentityActivity.this);
+      BhoAlertDialog dialogBuilder = new BhoAlertDialog(VerifyIdentityActivity.this);
       dialogBuilder.setTitle(R.string.save_identity_key_);
       dialogBuilder.setIcon(android.R.drawable.ic_dialog_info);
       dialogBuilder.setMessage(R.string.are_you_sure_that_you_would_like_to_mark_this_as_a_valid_identity_key_for_all_future_correspondence_with_this_recipient);

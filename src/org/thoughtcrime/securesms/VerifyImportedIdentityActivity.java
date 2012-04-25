@@ -20,20 +20,18 @@ import org.thoughtcrime.securesms.crypto.IdentityKey;
 import org.thoughtcrime.securesms.crypto.InvalidKeyException;
 import org.thoughtcrime.securesms.crypto.MasterSecret;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
+import org.thoughtcrime.securesms.lang.BhoAlertDialog;
 import org.thoughtcrime.securesms.lang.BhoButton;
 import org.thoughtcrime.securesms.lang.BhoEditText;
 import org.thoughtcrime.securesms.lang.BhoTextView;
+import org.thoughtcrime.securesms.lang.BhoToast;
 import org.thoughtcrime.securesms.util.Dialogs;
 import org.thoughtcrime.securesms.util.MemoryCleaner;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -109,11 +107,11 @@ public class VerifyImportedIdentityActivity extends KeyScanningActivity {
   private class VerifiedButtonListener implements View.OnClickListener {
     public void onClick(View v) {
       if (identityName.getText() == null || identityName.getText().length() == 0) {
-        Toast.makeText(VerifyImportedIdentityActivity.this, R.string.you_must_specify_a_name_for_this_contact_, Toast.LENGTH_LONG);
+        new BhoToast(VerifyImportedIdentityActivity.this, R.string.you_must_specify_a_name_for_this_contact_, Toast.LENGTH_LONG);
         return;
       }
 			
-      AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(VerifyImportedIdentityActivity.this);
+      BhoAlertDialog dialogBuilder = new BhoAlertDialog(VerifyImportedIdentityActivity.this);
       dialogBuilder.setTitle(R.string.save_identity_key_);
       dialogBuilder.setIcon(android.R.drawable.ic_dialog_info);
       dialogBuilder.setMessage(getString(R.string.are_you_sure_that_you_would_like_to_mark_this_as_a_valid_identity_key_,identityName.getText()) + 

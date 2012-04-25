@@ -37,6 +37,7 @@ import org.thoughtcrime.securesms.database.MessageRecord;
 import org.thoughtcrime.securesms.database.NoExternalStorageException;
 import org.thoughtcrime.securesms.database.SmsMigrator;
 import org.thoughtcrime.securesms.database.ThreadDatabase;
+import org.thoughtcrime.securesms.lang.BhoAlertDialog;
 import org.thoughtcrime.securesms.lang.BhoContextualMenu;
 import org.thoughtcrime.securesms.lang.BhoToast;
 import org.thoughtcrime.securesms.lang.BhoTyper;
@@ -452,7 +453,7 @@ public class SecureSMS extends ListActivity {
   }
 	
   private void deleteSelectedThreads() {
-    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    BhoAlertDialog alert = new BhoAlertDialog(this);
     alert.setIcon(android.R.drawable.ic_dialog_alert);
     alert.setTitle(R.string.delete_threads_);
     alert.setMessage(R.string.are_you_sure_you_wish_to_delete_all_selected_conversation_threads_);
@@ -668,7 +669,8 @@ public class SecureSMS extends ListActivity {
   }
 
   private void deleteThread(long threadId) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	  Log.d(BhoTyper.BHOTAG, "deleting thread HARLO");
+    BhoAlertDialog builder = new BhoAlertDialog(this);
     builder.setTitle(R.string.delete_thread_confirmation);
     builder.setIcon(android.R.drawable.ic_dialog_alert);
     builder.setCancelable(true);
@@ -820,7 +822,8 @@ public class SecureSMS extends ListActivity {
     }
 		
     public void importFromSd() {
-      AlertDialog.Builder alertBuilder = new AlertDialog.Builder(SecureSMS.this);
+    	Log.d(BhoTyper.BHOTAG, "importing from sd HARLO");
+      BhoAlertDialog alertBuilder = new BhoAlertDialog(SecureSMS.this);
       alertBuilder.setTitle(R.string.import_database_and_settings_);
       alertBuilder.setMessage(getString(R.string.import_textsecure_database_keys_and_settings_from_the_sd_card_1) + "\n\n" + getString(R.string.import_textsecure_database_keys_and_settings_from_the_sd_card_2));
       alertBuilder.setCancelable(false);
@@ -837,7 +840,8 @@ public class SecureSMS extends ListActivity {
     }
 		
     public void export() {
-      AlertDialog.Builder alertBuilder = new AlertDialog.Builder(SecureSMS.this);
+    	Log.d(BhoTyper.BHOTAG, "exporting to sd HARLO");
+      BhoAlertDialog alertBuilder = new BhoAlertDialog(SecureSMS.this);
       alertBuilder.setTitle(R.string.export_database_);
       alertBuilder.setMessage(R.string.export_textsecure_database_keys_and_settings_to_the_sd_card_);
       alertBuilder.setCancelable(false);
@@ -1001,7 +1005,7 @@ public class SecureSMS extends ListActivity {
     }
 		
     public void migrate() {
-      AlertDialog.Builder alertBuilder = new AlertDialog.Builder(SecureSMS.this);
+      BhoAlertDialog alertBuilder = new BhoAlertDialog(SecureSMS.this);
       alertBuilder.setTitle(R.string.copy_system_text_message_database_);
       alertBuilder.setMessage(R.string.current_versions_of_textsecure_use_an_encrypted_database);
       alertBuilder.setCancelable(false);

@@ -51,7 +51,6 @@ import org.thoughtcrime.securesms.util.MemoryCleaner;
 
 import ws.com.google.android.mms.MmsException;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -77,6 +76,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
+
+import org.thoughtcrime.securesms.lang.BhoAlertDialog;
 import org.thoughtcrime.securesms.lang.BhoButton;
 import org.thoughtcrime.securesms.lang.BhoContextualMenu;
 import org.thoughtcrime.securesms.lang.BhoToast;
@@ -437,7 +438,7 @@ public class ComposeMessageActivity extends Activity {
   private void initiateSecureSession() {
     Recipient recipient         = recipients.getPrimaryRecipient();
     String recipientName        = (recipient.getName() == null ? recipient.getNumber() : recipient.getName());
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    BhoAlertDialog builder = new BhoAlertDialog(this);
     builder.setTitle(R.string.initiate_secure_session_);
     builder.setIcon(android.R.drawable.ic_dialog_info);
     builder.setCancelable(true);
@@ -448,7 +449,7 @@ public class ComposeMessageActivity extends Activity {
   }
 	
   private void abortSecureSession() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    BhoAlertDialog builder = new BhoAlertDialog(this);
     builder.setTitle(R.string.abort_secure_session_confirmation);
     builder.setIcon(android.R.drawable.ic_dialog_alert);
     builder.setCancelable(true);
@@ -474,7 +475,7 @@ public class ComposeMessageActivity extends Activity {
     long date        = messageRecord.getDate();
 
     SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE MMM d, yyyy 'at' hh:mm:ss a zzz");
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    BhoAlertDialog builder = new BhoAlertDialog(this);
     builder.setTitle(R.string.message_details);
     builder.setIcon(android.R.drawable.ic_dialog_info);
     builder.setCancelable(false);
@@ -507,7 +508,7 @@ public class ComposeMessageActivity extends Activity {
     long messageId   = messageRecord.getId();
     String transport = messageRecord.isMms() ? "mms" : "sms";
     
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    BhoAlertDialog builder = new BhoAlertDialog(this);
     builder.setTitle(getString(R.string.delete_message_confirmation));
     builder.setIcon(android.R.drawable.ic_dialog_alert);
     builder.setCancelable(true);
@@ -518,7 +519,7 @@ public class ComposeMessageActivity extends Activity {
   }
 	
   private void deleteThread() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	BhoAlertDialog builder = new BhoAlertDialog(this);
     builder.setTitle(R.string.delete_thread_confirmation);
     builder.setIcon(android.R.drawable.ic_dialog_alert);
     builder.setCancelable(true);
@@ -529,7 +530,7 @@ public class ComposeMessageActivity extends Activity {
   }
 	
   private void addAttachment() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    BhoAlertDialog builder = new BhoAlertDialog(this);
     builder.setIcon(R.drawable.ic_dialog_attach);
     builder.setTitle(R.string.add_attachment);
     builder.setAdapter(attachmentAdapter, new AttachmentTypeListener());		
@@ -849,7 +850,7 @@ public class ComposeMessageActivity extends Activity {
       if      (clicked == greyLock)   message = getString(R.string.this_session_is_verified_to_be_authentic_);
       else if (clicked == redLock)    message = getString(R.string.warning_this_session_has_not_yet_been_verified_to_be_authentic);
 			
-      AlertDialog.Builder builder = new AlertDialog.Builder(ComposeMessageActivity.this);
+      BhoAlertDialog builder = new BhoAlertDialog(ComposeMessageActivity.this);
       builder.setTitle(R.string.authenticity);
       builder.setIcon(android.R.drawable.ic_dialog_info);
       builder.setCancelable(false);
