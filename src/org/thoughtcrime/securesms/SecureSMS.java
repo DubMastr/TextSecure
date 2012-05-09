@@ -178,7 +178,9 @@ public class SecureSMS extends ListActivity {
     
     Log.w("securesms", "restart called...");
     initializeColors();
-    Eula.showEula(this);
+    
+  //  Eula.showEula(this); skipping the Eula for the Bho version
+    eulaComplete();
     
   }
   
