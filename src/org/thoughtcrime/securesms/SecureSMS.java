@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,6 +64,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -147,6 +149,9 @@ public class SecureSMS extends ListActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    
+    setLocale ();
+    
     getWindow().requestFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.main);
         
@@ -159,6 +164,24 @@ public class SecureSMS extends ListActivity {
     
 	t = Typeface.createFromAsset(getAssets(), BhoTyper.FONT);
     
+  }
+  
+  private void setLocale ()
+  {
+  	
+  	 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+      Configuration config = getResources().getConfiguration();
+
+      String lang = settings.getString(SecureSMSApp.PREF_DEFAULT_LOCALE, SecureSMSApp.DEFAULT_LOCALE);
+      
+      if (! "".equals(lang) && ! config.locale.getLanguage().equals(lang))
+      {
+      	Locale locale = new Locale(lang);
+          Locale.setDefault(locale);
+          config.locale = locale;
+          getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+      }
   }
   
   @Override

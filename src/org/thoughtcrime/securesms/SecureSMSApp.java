@@ -11,7 +11,7 @@ public class SecureSMSApp extends Application
 {
 
 	private Locale locale;
-	private final static String DEFAULT_LOCALE = "bo";
+	public final static String DEFAULT_LOCALE = "bo";
 	private SharedPreferences settings;
 	
 	public final static String PREF_DEFAULT_LOCALE = "dl";
